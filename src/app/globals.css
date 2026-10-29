@@ -1,0 +1,447 @@
+@import "tailwindcss";
+
+/* ============================================================
+   MOHSIN — THE EXPERIMENTAL ARCHIVE
+   Design tokens
+   ============================================================ */
+
+@theme {
+  /* --- Colour ------------------------------------------------ */
+  --color-void: #08090d;
+  --color-carbon: #14171d;
+  --color-graphite: #22252d;
+  --color-slate: #2e323c;
+  --color-bone: #ece8df;
+  --color-silver: #a4a7ae;
+  --color-champagne: #b8a68c;
+  --color-signal: #9287ea;
+  --color-signal-soft: #b3abf2;
+  --color-teal: #264b51;
+  --color-teal-bright: #4f9aa2;
+  --color-teal-soft: #7fb3b8;
+  --color-ember: #d97757;
+
+  /* --- Typography -------------------------------------------- */
+  --font-display: var(--font-instrument-serif), "Times New Roman", serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* --- Motion ------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-settle: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --dur-instant: 140ms;
+  --dur-fast: 200ms;
+  --dur-base: 320ms;
+  --dur-slow: 620ms;
+  --dur-page: 760ms;
+
+  /* --- Layers ------------------------------------------------- */
+  --z-canvas: 0;
+  --z-content: 10;
+  --z-header: 100;
+  --z-menu: 200;
+  --z-cursor: 300;
+  --z-transition: 400;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+:root {
+  /* duplicated outside @theme so raw CSS always resolves, whatever the
+     bundler decides to emit from the theme layer */
+  --dur-instant: 140ms;
+  --dur-fast: 200ms;
+  --dur-base: 320ms;
+  --dur-slow: 620ms;
+  --dur-page: 760ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-settle: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --z-canvas: 0;
+  --z-content: 10;
+  --z-header: 100;
+  --z-menu: 200;
+  --z-cursor: 300;
+  --z-transition: 400;
+
+  --margin: clamp(18px, 4.2vw, 68px);
+  --gutter: clamp(16px, 2.4vw, 40px);
+  --maxw: 1600px;
+
+  --sp-2xs: 0.25rem;
+  --sp-xs: 0.5rem;
+  --sp-sm: 0.75rem;
+  --sp-md: 1rem;
+  --sp-lg: 1.5rem;
+  --sp-xl: 2rem;
+  --sp-2xl: 3rem;
+  --sp-3xl: 4.5rem;
+  --sp-4xl: 7rem;
+  --sp-section: clamp(5rem, 12vh, 11rem);
+
+  --hairline: color-mix(in oklab, var(--color-bone) 14%, transparent);
+  --hairline-strong: color-mix(in oklab, var(--color-bone) 28%, transparent);
+
+  /* atmosphere per chapter — animated by GSAP */
+  --atmo-a: #08090d;
+  --atmo-b: #0b0d13;
+  --atmo-glow: rgba(146, 135, 234, 0.09);
+
+  --blur-glass: 14px;
+  --shadow-deep: 0 30px 90px -40px rgba(0, 0, 0, 0.9);
+
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--hairline);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
+html,
+body {
+  background: var(--color-void);
+  color: var(--color-bone);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(15px, 0.55vw + 13.5px, 17px);
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-void);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================================
+   Layout primitives
+   ============================================================ */
+
+.shell {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--margin);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--sp-section);
+}
+
+.hairline {
+  height: 1px;
+  width: 100%;
+  background: var(--hairline);
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+
+.u-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+}
+
+.u-wordmark {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+.u-meta {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 0.72vw, 12px);
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+.u-serif-em {
+  font-family: var(--font-display);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: var(--color-champagne);
+}
+
+.u-lead {
+  font-size: clamp(1.05rem, 1.1vw + 0.85rem, 1.45rem);
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+  color: color-mix(in oklab, var(--color-bone) 88%, transparent);
+}
+
+.u-hairline-link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+}
+
+.u-hairline-link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.u-hairline-link:hover::after,
+.u-hairline-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ============================================================
+   Reveal primitives (progressively enhanced by GSAP)
+   ============================================================ */
+
+[data-reveal] {
+  opacity: 1;
+}
+
+.js [data-reveal] {
+  opacity: 0;
+}
+
+.js [data-reveal="line"] {
+  overflow: hidden;
+}
+
+/* ============================================================
+   Atmosphere — the animated backdrop under the WebGL canvas
+   ============================================================ */
+
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 76% 8%, var(--atmo-glow), transparent 62%),
+    linear-gradient(180deg, var(--atmo-a) 0%, var(--atmo-b) 58%, var(--atmo-a) 100%);
+}
+
+.atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(var(--hairline) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
+  background-size: 120px 120px;
+  mask-image: radial-gradient(90% 70% at 50% 40%, #000 10%, transparent 78%);
+}
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: calc(var(--z-content) + 60);
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: var(--grain-url);
+  background-size: 180px 180px;
+  animation: grain-shift 6s steps(6) infinite;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -4%); }
+  60% { transform: translate(-3%, -2%); }
+  80% { transform: translate(4%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ============================================================
+   Canvas layer
+   ============================================================ */
+
+.canvas-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out-expo);
+}
+
+.canvas-layer.is-ready {
+  opacity: 1;
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain {
+    animation: none;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+  }
+}
+
+/* utility used across chapters */
+.sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   Split-text reveal primitives
+   ============================================================ */
+
+.sp-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.sp-ch {
+  display: inline-block;
+  will-change: transform;
+}
+
+.js [data-piece] {
+  opacity: 0;
+}
+
+.js [data-reveal] {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-piece],
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* no-JS safety: never hide content when scripting is unavailable */
+html:not(.js) [data-piece],
+html:not(.js) [data-reveal] {
+  opacity: 1 !important;
+}
+
+/* ============================================================
+   Laboratory constellation
+   ============================================================ */
+
+@keyframes lab-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(0.35px, -0.45px);
+  }
+  66% {
+    transform: translate(-0.3px, 0.3px);
+  }
+}
+
+.lab-node {
+  cursor: pointer;
+  animation: lab-drift 9s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -1.3s);
+}
+
+.lab-node circle,
+.lab-node text {
+  transition:
+    r var(--dur-base) var(--ease-out-expo),
+    fill var(--dur-base) var(--ease-out-expo),
+    fill-opacity var(--dur-base) var(--ease-out-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-node {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Gallery drag affordance
+   ============================================================ */
+
+.is-dragging,
+.is-dragging * {
+  cursor: grabbing !important;
+  user-select: none;
+}
